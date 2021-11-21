@@ -1,18 +1,12 @@
 <template>
   <div class="container mx-auto h-full flex flex-col justify-center items-center">
-    <h1 class="text-secondary text-4xl text-center">
-      Com<strong class="text-primary">Fiado</strong>
-    </h1>
+    <img
+      src="@/assets/img/logo.svg"
+      alt="Logo Comfiado"
+    >
     <p>
       Slogan da empresa!
     </p>
-    <el-button
-      type="primary"
-      class="mt-4"
-      @click="redirectToProfilePage"
-    >
-      Acessar perfil
-    </el-button>
   </div>
 </template>
 

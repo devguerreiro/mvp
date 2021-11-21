@@ -1,6 +1,9 @@
 <template>
   <div class="h-full flex items-center px-4">
     <el-card class="w-full">
+      <h1 class="text-center mb-4">
+        {{ profile.name }}
+      </h1>
       <el-input
         v-model="cost"
         type="number"
@@ -8,6 +11,12 @@
         placeholder="Informe o valor a ser cobrado"
       />
       <div class="flex justify-center items-center mt-4">
+        <el-button
+          type="info"
+          @click="handleRedirectToProfile"
+        >
+          Acessar perfil
+        </el-button>
         <el-button
           type="primary"
           @click="handleCollect"
@@ -24,6 +33,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import { MessageBox } from 'element-ui';
 import { namespace } from 'vuex-class';
 
+import { Collaborator } from '@/interfaces/collaborator';
+
 const collaboratorStore = namespace('collaborator');
 
 @Component
@@ -31,25 +42,31 @@ export default class Collector extends Vue {
   private cost: number | null = null
 
   private showMessage(message: string, title: string): void {
+    console.log(this);
     MessageBox.alert(message, title, {
       center: true,
       type: 'success',
       customClass: 'collector__message-box',
       confirmButtonText: 'Entendido',
-      callback: this.redirectToHomePage,
     });
-  }
-
-  private redirectToHomePage():void{
-    this.$router.push({ name: 'Home' });
   }
 
   private handleCollect() {
     if (this.cost) {
-      this.showMessage(`O valor ${this.cost} foi adicionado a fatura`, 'Cobrança confirmada!');
+      const singularMessage = `Foi adicionado R$${this.cost} à fatura`;
+      const pluralMessage = `Foram adicionados R$${this.cost} à fatura`;
+      this.showMessage(this.cost > 1 ? pluralMessage : singularMessage, 'Cobrança registrada!');
       this.COLLECT(Number(this.cost));
+      this.cost = null;
     }
   }
+
+  private handleRedirectToProfile() {
+    this.$router.push({ name: 'Profile' });
+  }
+
+  @collaboratorStore.Getter
+  private readonly profile!: () => Collaborator
 
   @collaboratorStore.Mutation
   private COLLECT!: (cost: number) => void

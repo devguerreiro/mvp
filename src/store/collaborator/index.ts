@@ -22,8 +22,6 @@ export default class CollaboratorStore extends VuexModule {
   public COLLECT(cost: number): void {
     const { bill } = this._profile;
 
-    console.log(cost);
-
     bill.push(cost);
   }
 }
