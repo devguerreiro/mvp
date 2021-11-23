@@ -1,12 +1,12 @@
 import {
-  Module, VuexModule, Mutation,
+  Module, VuexModule, Mutation, Action,
 } from 'vuex-module-decorators';
 
 import { Collaborator } from '@/interfaces/collaborator';
 
-@Module({ namespaced: true, name: 'collaborator' })
+@Module({ namespaced: true })
 export default class CollaboratorStore extends VuexModule {
-  public _profile: Collaborator = {
+  private _profile: Collaborator = {
     cpf: '123.456.789-10',
     name: 'Tio Paulo do Facebook',
     paymentDate: '30/11/2021',
@@ -14,14 +14,19 @@ export default class CollaboratorStore extends VuexModule {
     bill: [],
   }
 
-  public get profile(): Collaborator {
+  private get profile(): Collaborator {
     return this._profile;
   }
 
   @Mutation
-  public COLLECT(cost: number): void {
+  private COLLECT(cost: number): void {
     const { bill } = this._profile;
 
     bill.push(cost);
+  }
+
+  @Action({ commit: 'COLLECT' })
+  private collect(cost: number): number {
+    return cost;
   }
 }

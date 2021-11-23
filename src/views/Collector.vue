@@ -41,8 +41,11 @@ const collaboratorStore = namespace('collaborator');
 export default class Collector extends Vue {
   private cost: number | null = null
 
+  @collaboratorStore.Getter('profile') profile!: Collaborator
+
+  @collaboratorStore.Action('collect') collect!: (cost: number) => void
+
   private showMessage(message: string, title: string): void {
-    console.log(this);
     MessageBox.alert(message, title, {
       center: true,
       type: 'success',
@@ -52,11 +55,15 @@ export default class Collector extends Vue {
   }
 
   private handleCollect() {
-    if (this.cost) {
-      const singularMessage = `Foi adicionado R$${this.cost} à fatura`;
-      const pluralMessage = `Foram adicionados R$${this.cost} à fatura`;
-      this.showMessage(this.cost > 1 ? pluralMessage : singularMessage, 'Cobrança registrada!');
-      this.COLLECT(Number(this.cost));
+    const cost = Number(this.cost);
+
+    if (cost) {
+      const singularMessage = `Foi adicionado R$${cost} à fatura`;
+      const pluralMessage = `Foram adicionados R$${cost} à fatura`;
+
+      this.showMessage(cost > 1 ? pluralMessage : singularMessage, 'Cobrança registrada!');
+
+      this.collect(cost);
       this.cost = null;
     }
   }
@@ -64,12 +71,6 @@ export default class Collector extends Vue {
   private handleRedirectToProfile() {
     this.$router.push({ name: 'Profile' });
   }
-
-  @collaboratorStore.Getter
-  private readonly profile!: () => Collaborator
-
-  @collaboratorStore.Mutation
-  private COLLECT!: (cost: number) => void
 }
 </script>
 

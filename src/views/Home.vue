@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto h-full flex flex-col justify-center items-center">
     <img
-      src="@/assets/img/logo.svg"
+      src="@/assets/img/logo.jpeg"
       alt="Logo Comfiado"
     >
     <p>
